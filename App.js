@@ -10,43 +10,43 @@ import "./node_modules/bootstrap/dist/css/bootstrap.min.css";
 import './styles.css';
 
 const { Map } = require('immutable');
-
 export default function App() {
-    // const [update, triggerUpdate] = useState(0);
-    const [todos, setTodos] = useState(new Map());
-    todos.set("1", "123");
-    console.log("APP: " + JSON.stringify(todos));
 
-    const checkTodos = (k, date) => {
+    /* @todos : list of entries
+        * type: map 
+        * key : date (string)
+        * value: map (key: entry id (string); value: info of entry (obj {title, date, time})) 
+    */
+    const [todos, setTodos] = useState(new Map());
+
+    // check if entry id is unique
+    const checkTodos = (entryid, date) => {
         if(todos.get(date) == undefined) return true;
-        return !todos.get(date).has(k);
+        return !todos.get(date).has(entryid);
     }
 
-    const addTodos = (k, v) => {
-        if(v.date === "") v.date = "-1";
-        if(v.time === "") v.time = "-1";
-        // if(todos.get(v.date) === undefined) setTodos(new Map(todos.set(v.date, new Map())));
-        console.log(JSON.stringify(todos));
-        if(todos.get(v.date) === undefined) {
-            console.log("NEW DATE");
-            setTodos(new Map(todos.set(v.date, new Map([[k, v]]))));
+
+    const addTodos = (entryid, entryinfo) => {
+        if(entryinfo.date === "") entryinfo.date = "-1";
+        if(entryinfo.time === "") entryinfo.time = "-1";
+        
+        if(todos.get(entryinfo.date) === undefined) {
+            setTodos(new Map(todos.set(entryinfo.date, new Map([[entryid, entryinfo]]))));
         } else {
-            console.log("EXISTING DATE");
-            setTodos(new Map(todos.set(v.date, todos.get(v.date).set(k, v))));
+            setTodos(new Map(todos.set(entryinfo.date, todos.get(entryinfo.date).set(entryid, entryinfo))));
         }
     }
 
-    const removeTodos = (k, date) => {
-        setTodos(new Map(todos.get(date).delete(k)));
+    const removeTodos = (entryid, date) => {
+        setTodos(new Map(todos.get(date).delete(entryid)));
     }
 
     return (
         <View style={styles.container}>
             <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos }}>
-                <Form addTodos={(k, v) => addTodos(k, v)} checkTodos={k => checkTodos(k)} />
+                <Form />
                 <List />
                 <StatusBar style="auto" />
-                <div className="d-flex flex-row"></div>
             </TodoContext.Provider>
         </View>
     );
