@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import TodoContext from './context';
+import Entry from './Entry';
 
 function ModeDisplay({ mode, setMode }) {
     const modes = ["List", "Calendar"];
@@ -14,23 +15,6 @@ function ModeDisplay({ mode, setMode }) {
     }
     
     return <div>{res}</div>;
-}
-
-function Entry({ entry, show_date, show_time }) {
-    let entry_date = entry.date;
-    let entry_time = entry.time;
-    let entry_title = entry.title;
-
-    if(entry_date === "-1" || !show_date) entry_date = "";
-    if(entry_time === "-1" || !show_time) entry_time = "";
-
-    return (
-        <div>
-            <div className="entry entry-date">{entry_date}</div>
-            <div className="entry entry-time">{entry_time}</div>
-            <div className="entry entry-title">{entry_title}</div>
-        </div>
-    );
 }
 
 export default function List() {
@@ -50,7 +34,11 @@ export default function List() {
     } else if(mode === "Calendar") {
         const date = new Date();
         for(let i = 0; i < 7; i++) {
-            const k0 = [date.getFullYear(), ((date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)), date.getDate()].join("-");
+            const k0 = [
+                date.getFullYear(),
+                ((date.getMonth() < 9 ? "0" : "") + (date.getMonth() + 1)),
+                ((date.getDate() < 10 ? "0" : "") + (date.getDate()))
+            ].join("-");
             const curr = [<div key="list0">{k0}</div>];
             if(todos.get(k0) != undefined) {
                 curr.push([...todos.get(k0).keys()].map(k => {
