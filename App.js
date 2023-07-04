@@ -38,7 +38,14 @@ export default function App() {
     }
 
     const removeTodos = (entryid, date) => {
-        setTodos(new Map(todos.get(date).delete(entryid)));
+
+        let datetodos = new Map(todos.get(date));
+        datetodos = datetodos.delete(entryid);
+
+        let newtodos = new Map(todos);
+        newtodos = newtodos.set(date, datetodos);
+
+        setTodos(newtodos);
     }
 
     return (

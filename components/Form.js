@@ -3,7 +3,6 @@ import { useCollapse } from 'react-collapsed';
 import TodoContext from './context';
 
 export default function Form() {
-    const [visible, setVisible] = useState(false);
     const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
     const [title, setTitle] = useState("");
@@ -24,7 +23,6 @@ export default function Form() {
 
     const submit = (event) => {
         event.preventDefault();
-        console.log("submit");
         if(title === "") {
             setTitleError("Title cannot be empty.");
             return;
