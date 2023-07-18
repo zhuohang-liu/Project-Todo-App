@@ -23,10 +23,10 @@ export default function List() {
 
     var res = [];
     if(mode === "List") {
-        res.push([...todos.keys()].map(k => {
-            return [...todos.get(k).keys()].map(k2 => {
+        res.push([...todos.keys()].sort().map(k => {
+            return [...todos.get(k).keys()].sort().map(k2 => {
                 return (
-                    <Entry entry={todos.get(k).get(k2)} show_date={true} show_time={true} key={"list"+k} />
+                    <Entry entry={todos.get(k).get(k2)} show_date={true} show_time={true} key={"list"+k2} />
                 );
             });
         }));
@@ -40,7 +40,7 @@ export default function List() {
             ].join("-");
             const curr = [<div key="list0">{k0}</div>];
             if(todos.get(k0) != undefined) {
-                curr.push([...todos.get(k0).keys()].map(k => {
+                curr.push([...todos.get(k0).keys()].sort().map(k => {
                     return (
                         <Entry entry={todos.get(k0).get(k)} show_date={false} show_time={true} key={"list"+k} />
                     );

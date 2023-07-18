@@ -1,6 +1,17 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { useCollapse } from 'react-collapsed';
 import TodoContext from './context';
+
+
+function Edit({entry_title, entry_date, entry_time}) {
+    const entryobj = {date: entry_date, time: entry_time, title: entry_title};
+
+    const { onEditClick } = useContext(TodoContext);
+
+    return (
+        <button onClick={() => onEditClick(entryobj)}>Edit</button>
+    );
+}
 
 function Delete({entryid, date}) {
     const { removeTodos } = useContext(TodoContext);
@@ -34,6 +45,9 @@ export default function Entry({ entry, show_date, show_time }) {
             <div {...getCollapseProps()}>
                 <div>
                     <Delete entryid={entry_key} date={_date}/>
+                </div>
+                <div>
+                    <Edit entry_title={entry_title} entry_date={entry_date} entry_time={entry_time}/>
                 </div>
             </div>
         </div>
