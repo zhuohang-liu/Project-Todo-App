@@ -1,15 +1,16 @@
 import { useState, createContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Map } from 'immutable';
 
 import TodoContext from './components/context';
 import Form from './components/Form';
 import List from './components/List';
+import Notify from './components/Notify';
 
 import "./node_modules/bootstrap/dist/css/bootstrap.min.css";
 import './styles.css';
 
-const { Map } = require('immutable');
 export default function App() {
 
     /* @todos : list of entries
@@ -18,6 +19,7 @@ export default function App() {
         * value: map (key: entry id (string); value: info of entry (obj {title, date, time})) 
     */
     const [todos, setTodos] = useState(new Map());
+    const [newEvent, setNewEvent] = useState({});
 
     // check if entry id is unique
     const checkTodos = (entryid, date) => {
@@ -30,6 +32,7 @@ export default function App() {
         if(entryinfo.date === "") entryinfo.date = "-1";
         if(entryinfo.time === "") entryinfo.time = "-1";
         
+        setNewEvent(entryinfo);
         if(todos.get(entryinfo.date) === undefined) {
             setTodos(new Map(todos.set(entryinfo.date, new Map([[entryid, entryinfo]]))));
         } else {
@@ -41,11 +44,16 @@ export default function App() {
         setTodos(new Map(todos.get(date).delete(entryid)));
     }
 
+    const setEvent = (e) => {
+        setNewEvent(e);
+    }
+
     return (
         <View style={styles.container}>
-            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos }}>
+            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos, newEvent, setEvent }}>
                 <Form />
                 <List />
+                <Notify />
                 <StatusBar style="auto" />
             </TodoContext.Provider>
         </View>

@@ -47,7 +47,7 @@ export default function Form() {
             setDateTimeError("");
         }
         
-        addTodos(key, {date: date, time: time, title: title});
+        addTodos(key, {key: key, date: date, time: time, title: title, notified: false});
     }
 
     return (
