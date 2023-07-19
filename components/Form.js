@@ -66,11 +66,11 @@ export default function Form({display_entry, fmode}) {
         }
 
         if (mode === "add") {
-            addTodos(key, {date: date, time: time, title: title, notified: false});
+            addTodos(key, {key: key, date: date, time: time, title: title, notified: false});
         }
         else if (mode === "edit") {
             let display_entryid = generateKey(display_date, display_time, display_title);
-            editTodos(display_entryid, display_date, key, {date: date, time: time, title: title, notified: false});
+            editTodos(display_entryid, display_date, key, {key: key, date: date, time: time, title: title, notified: false});
             setMode("add");
         }
 
