@@ -43,7 +43,6 @@ export default function App() {
         if(entryinfo.date === "") entryinfo.date = "-1";
         if(entryinfo.time === "") entryinfo.time = "-1";
         
-        console.log(JSON.stringify(entryinfo));
         setNewEvent(entryinfo);
         if(todos.get(entryinfo.date) === undefined) {
             setTodos(new Map(todos.set(entryinfo.date, new Map([[entryid, entryinfo]]))));
@@ -53,7 +52,15 @@ export default function App() {
     }
 
     const removeTodos = (entryid, date) => {
-        setTodos(new Map(todos.get(date).delete(entryid)));
+        if (date === "") date = "-1";
+
+        let datetodos = new Map(todos.get(date));
+        datetodos = datetodos.delete(entryid);
+
+        let newtodos = new Map(todos);
+        newtodos = newtodos.set(date, datetodos);
+
+        setTodos(newtodos);
     }
 
     const editTodos = (old_entryid, old_date, new_entryid, new_entryinfo) => {
@@ -65,10 +72,11 @@ export default function App() {
         let newtodos = new Map(todos);
         newtodos = newtodos.set(old_date, datetodos);
         
-
+        
         if(new_entryinfo.date === "") new_entryinfo.date = "-1";
         if(new_entryinfo.time === "") new_entryinfo.time = "-1";
         
+        setNewEvent(new_entryinfo);
         if(newtodos.get(new_entryinfo.date) === undefined) {
             setTodos(new Map(newtodos.set(new_entryinfo.date, new Map([[new_entryid, new_entryinfo]]))));
         } else {
