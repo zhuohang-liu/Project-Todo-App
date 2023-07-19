@@ -1,15 +1,16 @@
 import { useState, createContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Map } from 'immutable';
 
 import TodoContext from './components/context';
 import Form from './components/Form';
 import List from './components/List';
+import Notify from './components/Notify';
 
 import "./node_modules/bootstrap/dist/css/bootstrap.min.css";
 import './styles.css';
 
-const { Map } = require('immutable');
 export default function App() {
 
     /* @todos : list of entries
@@ -29,6 +30,7 @@ export default function App() {
         * type: string
     */
     const [fmode, setFmode] = useState("add");
+    const [newEvent, setNewEvent] = useState({});
 
     // check if entry id is unique
     const checkTodos = (entryid, date) => {
@@ -41,6 +43,8 @@ export default function App() {
         if(entryinfo.date === "") entryinfo.date = "-1";
         if(entryinfo.time === "") entryinfo.time = "-1";
         
+        console.log(JSON.stringify(entryinfo));
+        setNewEvent(entryinfo);
         if(todos.get(entryinfo.date) === undefined) {
             setTodos(new Map(todos.set(entryinfo.date, new Map([[entryid, entryinfo]]))));
         } else {
@@ -49,13 +53,7 @@ export default function App() {
     }
 
     const removeTodos = (entryid, date) => {
-        let datetodos = new Map(todos.get(date));
-        datetodos = datetodos.delete(entryid);
-
-        let newtodos = new Map(todos);
-        newtodos = newtodos.set(date, datetodos);
-
-        setTodos(newtodos);
+        setTodos(new Map(todos.get(date).delete(entryid)));
     }
 
     const editTodos = (old_entryid, old_date, new_entryid, new_entryinfo) => {
@@ -84,12 +82,16 @@ export default function App() {
         setFmode("edit");
     }
 
+    const setEvent = (e) => {
+        setNewEvent(e);
+    }
 
     return (
         <View style={styles.container}>
-            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos, editTodos, onEditClick }}>
+            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos, editTodos, onEditClick, newEvent, setEvent }}>
                 <Form display_entry={entrydisplay} fmode={fmode}/>
                 <List />
+                <Notify />
                 <StatusBar style="auto" />
             </TodoContext.Provider>
         </View>
