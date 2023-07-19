@@ -21,7 +21,6 @@ function ModeDisplay({ mode, setMode }) {
 export default function List() {
     const { todos } = useContext(TodoContext);
     const [ mode, setMode ] = useState("List");
-    console.log(JSON.stringify(todos));
 
     var res = [];
     if(mode === "List") {

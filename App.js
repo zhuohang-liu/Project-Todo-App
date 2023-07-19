@@ -19,6 +19,17 @@ export default function App() {
         * value: map (key: entry id (string); value: info of entry (obj {title, date, time})) 
     */
     const [todos, setTodos] = useState(new Map());
+    
+    /* @entrydisplay : entry to be displayed in the form
+        * type: object 
+        * fields : title (string), date (string), time (string)
+    */
+    const [entrydisplay, setEntrydisplay] = useState({date: "", time: "", title: ""});
+
+    /* @fmode : mode of the form (either "add" or "edit")
+        * type: string
+    */
+    const [fmode, setFmode] = useState("add");
     const [newEvent, setNewEvent] = useState({});
 
     // check if entry id is unique
@@ -50,8 +61,8 @@ export default function App() {
 
     return (
         <View style={styles.container}>
-            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos, newEvent, setEvent }}>
-                <Form />
+            <TodoContext.Provider value={{ todos, checkTodos, addTodos, removeTodos, editTodos, onEditClick, newEvent, setEvent }}>
+                <Form display_entry={entrydisplay} fmode={fmode}/>
                 <List />
                 <Notify />
                 <StatusBar style="auto" />
