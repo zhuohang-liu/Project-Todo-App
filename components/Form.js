@@ -6,13 +6,14 @@ import TodoContext from './context';
 export default function Form({display_entry, fmode}) {
     const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
-    const display_title = display_entry.title, display_date = display_entry.date, display_time = display_entry.time;
+    const display_title = display_entry.title, display_date = display_entry.date, display_time = display_entry.time, display_details = display_entry.details;
 
     const { checkTodos, addTodos, editTodos } = useContext(TodoContext);
 
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
+    const [details, setDetails] = useState("");
 
     const [titleError, setTitleError] = useState("");
     const [datetimeError, setDateTimeError] = useState("");
@@ -25,6 +26,7 @@ export default function Form({display_entry, fmode}) {
         setTitle(display_title);
         setDate(display_date);
         setTime(display_time);
+        setDetails(display_details);
         setMode(fmode);
 
     }, [display_entry, fmode]);
@@ -40,6 +42,7 @@ export default function Form({display_entry, fmode}) {
         setTitle("");
         setDate("");
         setTime("");
+        setDetails("");
     }
 
     const submit = () => {
@@ -58,19 +61,22 @@ export default function Form({display_entry, fmode}) {
         }
         
         var key = generateKey(date, time, title);
+
         if(!checkTodos(key, date)) {
-            setDateTimeError("An event with identical time and title already exists.");
-            return;
+            if (mode === "add") {
+                setDateTimeError("An event with identical time and title already exists.");
+                return;
+            }
         } else {
             setDateTimeError("");
         }
 
         if (mode === "add") {
-            addTodos(key, {key: key, date: date, time: time, title: title, notified: false});
+            addTodos(key, {key: key, date: date, time: time, title: title, details: details, notified: false});
         }
         else if (mode === "edit") {
             let display_entryid = generateKey(display_date, display_time, display_title);
-            editTodos(display_entryid, display_date, key, {key: key, date: date, time: time, title: title, notified: false});
+            editTodos(display_entryid, display_date, key, {key: key, date: date, time: time, title: title, details: details, notified: false});
             setMode("add");
         }
 
@@ -101,7 +107,8 @@ export default function Form({display_entry, fmode}) {
                     <input type="checkbox"/>
                     <span className="slider round"/>
                 </label><br/>
-                
+                <label htmlFor="details">Details: </label><br/>
+                <input type="text" id="details" name="details" value={details} onChange={v => setDetails(v.target.value.trim())}/><br/>
                 <input type="date" id="date" name="date" value={date} onChange={v => setDate(v.target.value.trim())}/><br/>
                 <input type="time" id="time" name="time" value={time} onChange={v => setTime(v.target.value.trim())}/>
             </div>
