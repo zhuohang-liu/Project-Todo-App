@@ -22,14 +22,15 @@ export default function App() {
     
     /* @entrydisplay : entry to be displayed in the form
         * type: object 
-        * fields : title (string), date (string), time (string)
+        * fields : title (string), date (string), time (string), details (string)
     */
-    const [entrydisplay, setEntrydisplay] = useState({date: "", time: "", title: ""});
+    const [entrydisplay, setEntrydisplay] = useState({date: "", time: "", title: "", details: ""});
 
     /* @fmode : mode of the form (either "add" or "edit")
         * type: string
     */
     const [fmode, setFmode] = useState("add");
+    
     const [newEvent, setNewEvent] = useState({});
 
     // check if entry id is unique
