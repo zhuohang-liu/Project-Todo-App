@@ -31,6 +31,10 @@ export default function App() {
     */
     const [fmode, setFmode] = useState("add");
     
+    /* @newEvent : newly added event, useful for notification purposes
+        * type: object
+        * fields : key (string), title (string), date (string), time (string), notified (boolean)
+    */
     const [newEvent, setNewEvent] = useState({});
 
     // check if entry id is unique
